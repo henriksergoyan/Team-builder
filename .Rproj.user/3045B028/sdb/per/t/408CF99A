@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n# unique(final$League)\n# min(final$Age)\n# max(final$Age)\n# unique(final$Position2)\n# unique(final$Position1)\n# final$Position1[1]\n\n\n# sort(c(\"B\",\"A\"))\nfinal <- readxl::read_excel(\"final_data3.xlsx\")\nGK <- mean(final[grepl(\"GK\",final$Position1),]$Price)/10**6\ndefenders <- mean(final[grepl(\"D\",final$Position1),]$Price)/10**6\nmidfields <- mean(final[grepl(\"M\",final$Position1),]$Price)/10**6\nforwards <- mean(final[grepl(\"FW\",final$Position1),]$Price)/10**6\nfinal1 <- final[final$Price<0.2,]\nfinal <- final[order(-final$Rating),]\nfinal_def <- final[(final$Price <= 10**8) & grepl(\"D\",final$Position1),]\nfinal_mid <- final[(final$Price <= 10**8) & grepl(\"M\",final$Position1),]\nfinal_fw <- final[(final$Price <= 10**8) & grepl(\"FW\",final$Position1),]\ndim(final_def)\n\n\nfinal1[0:2,]\nfinal[0:0,]\n30 * 2*midfields/(2*midfields+forwards + GK) \n100*10**6 \n30 * 1*forwards/(2*midfields+forwards + GK) \n\n30 * 1*GK/(2*midfields+forwards + GK) \nfinal1 <- final[order(-final$Rating),]\n\n# print(paste(\"AB\",\"/n\",\"C\"))\n# final1 <- final[final$Mins > quantile(final$Mins, 0.25),-1]\n\n# normalize <- function(x){\n#   return ((x-min(x))/(max(x)-min(x)))\n#  }\n# final1$Rating <- normalize(final1$Rating)\n# final1$Price <- normalize(final1$Price)\n# final1$test <- final1$Rating/final1$Price\n# final2 <- final1[order(-final1$test),]\n\n# cor(final1$Price,final1$Rating)\n# library(ggplot2)\nggplot(final, aes(x=Rating,y=Price/10**6))+ geom_point() +geom_smooth(method=\"lm\") +ylab(\"Price (Milion €)\")\n# final2 <- final1[final1$Rating > quantile(final1$Rating,0.75),]\n# final3 <- final2[order(final2$Price),]\n# final4 <- final2[order(-final2$Rating),]\n# final4$sc_price <- scale(final4$Price)\n# final4$sc_rating <- scale(final4$Rating)\n# quantile(final3$Price,0.8)\ncor(final$Price,final$Rating)\n# ggplot(final4, aes(x=sc_rating,y=sc_price))+ geom_point() +geom_smooth(method=\"lm\") +ylab(\"Price (Milion €)\")\n# \n# ggplot(final4, aes(x=price_scaled)) + geom_histogram()\n# ggplot(final, aes(x=Price)) + geom_histogram(binwidth = 10**7)\nlibrary(lpSolve)\np <- c(15, 100, 90, 60, 40, 15, 10,  1)\nw <- c( 2,  20, 20, 30, 40, 30, 60, 10)\ncap <- 102\np <- final_fw$Rating\nw <- final_fw$Price\nexact.num.elt <- 3\ncap <- 40 * 10**6\nmod <- lp(direction = \"max\",\n          objective.in = p,\n          const.mat = rbind(w, rep(1, length(p))),\n          const.dir = c(\"<=\", \"=\"),\n          const.rhs = c(cap, exact.num.elt),\n          all.bin = TRUE)\n# Solution\nfinal_fw[which(mod$solution >= 0.999),]\n\n",
+    "created" : 1544895489984.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "755202776",
+    "id" : "408CF99A",
+    "lastKnownWriteTime" : 1544383596,
+    "last_content_update" : 1544383596,
+    "path" : "~/Desktop/Sports Analytcs/Sports_Project/knapsack.R",
+    "project_path" : "knapsack.R",
+    "properties" : {
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
